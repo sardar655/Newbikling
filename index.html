@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -29,144 +29,376 @@ body{background:#0b1329;color:#f8fafc;padding:12px;padding-bottom:95px}
 </style>
 </head>
 <body>
+
 <div class="header">
   <h1>🍦 Shaik Enterprises - Billing & Khata</h1>
   <p>BN Talkies Back Side, Near GB Complex, Adoni - 518301</p>
 </div>
+
 <div class="tabs">
   <button class="tab-btn active" id="tab-btn-1" type="button" onclick="showTab(1)">🧾 Billing</button>
   <button class="tab-btn" id="tab-btn-2" type="button" onclick="showTab(2)">📒 Outlet Khata</button>
   <button class="tab-btn" id="tab-btn-3" type="button" onclick="showTab(3)">📦 Maal Stock</button>
 </div>
+
 <div id="tab-1">
   <div class="card">
     <div class="card-title">1. Outlet (Dukan) Chuniye</div>
-    <div class="form-group"><select id="sel-outlet" class="form-control" onchange="outletChanged()"></select></div>
+    <div class="form-group">
+      <select id="sel-outlet" class="form-control" onchange="outletChanged()">
+        <option value="0">Nagaraju medical (9799797979) - Udhar: ₹192</option>
+      </select>
+    </div>
     <div style="display:flex;gap:8px;margin-bottom:10px;">
-      <button type="button" class="btn btn-sm btn-primary" style="flex:1" onclick="openModal('outletModal',true)">➕ Add</button>
+      <button type="button" class="btn btn-sm btn-primary" style="flex:1" onclick="openModal('outletModal',true)">➕ Add Outlet</button>
       <button type="button" class="btn btn-sm btn-warning" style="flex:1" onclick="openEditOutletModal()">✏️ Edit</button>
       <button type="button" class="btn btn-sm" style="flex:1;background:rgba(239,68,68,0.2);color:#f87171;border:1px solid #ef4444" onclick="deleteSelectedOutlet()">🗑️ Del</button>
     </div>
     <div class="form-group"><label>Bill Date</label><input type="date" id="inp-date" class="form-control"></div>
   </div>
+
   <div class="card">
     <div class="card-title">2. Ice Cream Item Chuniye</div>
-    <div class="form-group"><label>Item Name (Official Rate & MRP)</label><select id="sel-item" class="form-control" onchange="itemDropdownChanged()"></select></div>
-    <div class="form-group"><label>🔍 Filter Item</label><input type="text" id="inp-item-search" class="form-control" placeholder="Search item..." oninput="filterItems()"></div>
-    <div class="flex-row">
-      <div class="form-group"><label>Outlet Rate (₹)</label><input type="number" id="inp-outlet-rate-box" class="form-control" readonly style="color:#10b981;font-weight:bold"></div>
-      <div class="form-group"><label id="lbl-avail-stock" style="color:#60a5fa">Stock</label><input type="number" id="inp-qty" class="form-control" value="1" min="1"></div>
+    <div class="form-group">
+      <label>Item Name (Official Rate & MRP)</label>
+      <select id="sel-item" class="form-control" onchange="itemDropdownChanged()"></select>
     </div>
-    <div class="form-group"><label style="color:#f59e0b">Official MRP / Box (₹)</label><input type="number" id="inp-mrp-box" class="form-control" readonly style="color:#f59e0b;font-weight:bold"></div>
+    <div class="form-group">
+      <label>🔍 Filter Item</label>
+      <input type="text" id="inp-item-search" class="form-control" placeholder="Search item..." oninput="filterItems()">
+    </div>
+    <div class="flex-row">
+      <div class="form-group">
+        <label>Outlet Rate (₹)</label>
+        <input type="number" id="inp-outlet-rate-box" class="form-control" readonly style="color:#10b981;font-weight:bold" value="144">
+      </div>
+      <div class="form-group">
+        <label id="lbl-avail-stock" style="color:#60a5fa">Stock: 50 Bx</label>
+        <input type="number" id="inp-qty" class="form-control" value="1" min="1">
+      </div>
+    </div>
+    <div class="form-group">
+      <label style="color:#f59e0b">Official MRP / Box (₹)</label>
+      <input type="number" id="inp-mrp-box" class="form-control" readonly style="color:#f59e0b;font-weight:bold" value="180">
+    </div>
     <button type="button" class="btn btn-primary" onclick="addItem()">➕ Add Item to Bill</button>
   </div>
+
   <div class="card">
-    <div class="card-title"><span>Bill Items (<span id="cart-count">0</span>)</span><button class="btn-sm" type="button" style="background:rgba(239,68,68,0.2);color:#f87171" onclick="clearCart()">Clear</button></div>
-    <div id="cart-container"></div>
+    <div class="card-title">
+      <span>Bill Items (<span id="cart-count">0</span>)</span>
+      <button class="btn-sm" type="button" style="background:rgba(239,68,68,0.2);color:#f87171" onclick="clearCart()">Clear</button>
+    </div>
+    <div id="cart-container"><p style="text-align:center;color:#94a3b8;font-size:13px;padding:12px">Koi item add nahi kiya gaya hai.</p></div>
     <div style="margin-top:12px;padding-top:12px;border-top:1px solid #273754">
       <div class="flex-row">
         <div class="form-group"><label>Cash Mila (₹)</label><input type="number" id="inp-cash-received" class="form-control" placeholder="0" oninput="calcUdhar()"></div>
-        <div class="form-group"><label style="color:#f87171">Pending (Udhar ₹)</label><input type="number" id="inp-pending-udhar" class="form-control" readonly style="color:#f87171;font-weight:bold"></div>
+        <div class="form-group"><label style="color:#f87171">Pending (Udhar ₹)</label><input type="number" id="inp-pending-udhar" class="form-control" readonly style="color:#f87171;font-weight:bold" value="0"></div>
       </div>
       <button type="button" class="btn btn-success" onclick="saveBillKhata()">💾 Bill Save Karein (Khata Update)</button>
     </div>
   </div>
 </div>
+
 <div id="tab-2" class="hidden">
-  <div class="card"><div class="card-title">Market Udhar Summary</div><h2 style="color:#ef4444;font-size:24px">₹<span id="txt-total-udhar">0</span></h2></div>
+  <div class="card"><div class="card-title">Market Udhar Summary</div><h2 style="color:#ef4444;font-size:24px">₹<span id="txt-total-udhar">192</span></h2></div>
   <div class="card"><div class="card-title">Outlets Khata Ledger</div><div id="khata-container"></div></div>
 </div>
+
 <div id="tab-3" class="hidden">
   <button type="button" class="btn btn-primary" style="margin-bottom:10px" onclick="openModal('newStockModal',true)">🚚 Naya Maal Aaya (+ Inward)</button>
   <div class="card"><div class="card-title">📦 Item-Wise Stock Report</div><div id="stock-items-table-container"></div></div>
 </div>
+
 <div class="modal-overlay" id="paymentModal"><div class="modal-box"><div class="modal-header"><h3>💵 Paisa Jama Karein</h3><button class="modal-close" onclick="openModal('paymentModal',false)">✕</button></div><label id="lbl-pay-outlet-name" style="color:#38bdf8;font-weight:bold;display:block;margin-bottom:8px"></label><div class="form-group"><label>Amount (₹)</label><input type="number" id="inp-pay-amount" class="form-control"></div><button type="button" class="btn btn-success" onclick="submitPayment()">✅ Jama Karein</button></div></div>
 <div class="modal-overlay" id="outletModal"><div class="modal-box"><div class="modal-header"><h3>➕ Naya Outlet</h3><button class="modal-close" onclick="openModal('outletModal',false)">✕</button></div><div class="form-group"><label>Dukan Name</label><input type="text" id="m-name" class="form-control"></div><div class="form-group"><label>WhatsApp Number</label><input type="tel" id="m-phone" class="form-control" maxlength="10"></div><button type="button" class="btn btn-primary" onclick="saveOutletFromModal()">Save</button></div></div>
 <div class="modal-overlay" id="editOutletModal"><div class="modal-box"><div class="modal-header"><h3>✏️ Edit Outlet</h3><button class="modal-close" onclick="openModal('editOutletModal',false)">✕</button></div><div class="form-group"><label>Dukan Name</label><input type="text" id="edit-m-name" class="form-control"></div><div class="form-group"><label>WhatsApp Number</label><input type="tel" id="edit-m-phone" class="form-control" maxlength="10"></div><button type="button" class="btn btn-primary" onclick="updateOutletFromModal()">Update</button></div></div>
 <div class="modal-overlay" id="newStockModal"><div class="modal-box"><div class="modal-header"><h3>🚚 Naya Maal</h3><button class="modal-close" onclick="openModal('newStockModal',false)">✕</button></div><div class="form-group"><label>Item</label><select id="m-stk-item" class="form-control"></select></div><div class="form-group"><label>Boxes Qty</label><input type="number" id="m-stk-qty" class="form-control" value="10"></div><button type="button" class="btn btn-primary" onclick="submitNewStockInward()">Add Stock</button></div></div>
+
 <div class="summary-bar"><h3>Bill: ₹<span id="txt-final">0</span></h3><div style="display:flex;gap:6px"><button class="btn btn-sm btn-accent" onclick="downloadBillImage()">🖼️ Image</button><button class="btn btn-sm btn-primary" onclick="sendWhatsApp()">📲 WhatsApp</button></div></div>
 
 <script>
-const rawData = "VANILLA 30ML (30 Pcs)|144|180~STRAWBERRY 30ml (30 Pcs)|144|180~BUTTER SCOTCH 30ml (30 Pcs)|144|180~CHOCOLATE 30ml (30 Pcs)|144|180~VANILLA 70ML (24 Pcs)|192|240~CHOCOLATE 70ml (24 Pcs)|192|240~STRAWBERRY 70ml (24 Pcs)|192|240~BUTTER SCOTCH 70ml (24 Pcs)|192|240~PISTA 70ml (24 Pcs)|192|240~MANGO 70ml (24 Pcs)|192|240~VANILLA 100ML (12 Pcs)|144|180~CHOCOLATE 100ml (12 Pcs)|144|180~STRAWBERRY 100ml (12 Pcs)|144|180~BUTTER SCOTCH 100ml (12 Pcs)|144|180~PISTA 100ml (12 Pcs)|144|180~MANGO 100ml (12 Pcs)|144|180~VANILLA 100ML (22 Pcs)|264|330~BUTTER SCOTCH 100ml (22 Pcs)|264|330~MANGO MAGIC 100ML (20 Pcs)|240|300~MANGO SIP UP 30ML (30 Pcs)|120|150~STRAWBERRY SIP UP 30ML (30 Pcs)|120|150~ORANGE ICE CANDY 35ml (30 Pcs)|144|180~MANGO ICE CANDY 35ml (30 Pcs)|144|180~GRAPE ICE CANDY 35ml (30 Pcs)|144|180~PINEAPPLE ICE CANDY 35ml (30 Pcs)|144|180~MANGO ICE CANDY 60ml (24 Pcs)|192|240~ORANGE ICE CANDY 60ml (24 Pcs)|192|240~STRAWBERRY ICECANDY - 60ml (24 Pcs)|192|240~GRAPE ICECANDY - 60ml (24 Pcs)|192|240~PINEAPPLE ICECANDY - 60ml (24 Pcs)|192|240~JALJEERA ICECANDY - 60ml (24 Pcs)|192|240~LYCHEE ICE CANDY 60ml (24 Pcs)|192|240~GREEN APPLE ICE CANDY 60ml (24 Pcs)|192|240~CHILLI PINK GUAVA ICE CANDY 60ml (24 Pcs)|192|240~BLUE BERRY ICE CANDY 60ml (24 Pcs)|192|240~STRAWBERRY DUET 60ml (24 Pcs)|384|480~MANGO DUET 60ml (24 Pcs)|384|480~ORANGE BAR 40ml (24 Pcs)|288|360~MINI CHOCOBAR 40ml (24 Pcs)|192|240~PREMIUM CHOCOBAR 70ml (16 Pcs)|256|320~CHOCOBASH 65ml (16 Pcs)|384|480~VANILLA CONE 40ml (30 Pcs)|240|300~BUTTER SCOTCH CONE 40ml (30 Pcs)|240|300~VANILLA CONE 60ml (16 Pcs)|256|320~STRAWBERRY CONE 60ml (16 Pcs)|256|320~PISTA CONE 60ml (16 Pcs)|256|320~CHOCOLATE CONE 60ml (16 Pcs)|320|400~BUTTER SCOTCH CONE 60ml (16 Pcs)|320|400~BLACK CURRANT CONE 60ml (16 Pcs)|320|400~VANILLA CONE 110ml (16 Pcs)|384|480~STRAWBERRY CONE 110ml (16 Pcs)|384|480~PISTA CONE 110ml (16 Pcs)|512|640~CHOCOLATE CONE 110ml (16 Pcs)|512|640~BUTTER SCOTCH CONE 110ml (16 Pcs)|512|640~BLACK CURRANT CONE 110ml (16 Pcs)|512|640~GULKAND KULFI 60ml (10 Pcs)|240|300~MALAI MASTI 60ml (10 Pcs)|240|300~PISTA KESAR 60ml (10 Pcs)|240|300~CHOCO ALMOND 60ml (10 Pcs)|240|300~MAWA CRUNCH 60ml (10 Pcs)|240|300~MAWA KULFI 60ml (10 Pcs)|240|300~PREMIUM MATKA KULFI 100ml (12 Pcs)|480|600~CASSATA 120ml (10 Pcs)|400|500~SWINGER SUNDAE 100ML (8 Pcs)|160|200~MANGO SUNDAE 100 ML (12 Pcs)|288|360~STRAWBERRY SUNDAE - 100ML (12 Pcs)|288|360~CHOCOLATE SUNDAE- 100ML (12 Pcs)|288|360~AMERICAN SUNDAE 100ML (12 Pcs)|288|360~GUDBUD 180ML (6 Pcs)|240|300~STRAWBERRY 700ml (1+1)|168|210~VANILLA 700ml (1+1)|168|210~CHOCOLATE 700ml (1+1)|208|260~PLAIN PISTA 700ml (1+1)|208|260~PLAIN PINEAPPLE 700ml (1+1)|208|260~BUTTER SCOTCH 700ml (1+1)|208|260~STRAWBERRY 1.25 Ltr (1 Pcs)|160|200~VANILLA 1.25 Ltr (1 Pcs)|160|200~CHOCOLATE 1.25 Ltr (1 Pcs)|192|240~PLAIN PISTA 1.25 Ltr (1 Pcs)|192|240~PLAIN PINEAPPLE 1.25 Ltr (1 Pcs)|192|240~VANILLA 4 Ltr (1 Pcs)|440|550~STRAWBERRY 4 Ltr (1 Pcs)|440|550~MADAGASCAR VANILLA 4 Ltr (1 Pcs)|560|700~DIL KHUSH 4 Ltr (1 Pcs)|576|720~BUTTER SCOTCH 4 Ltr (1 Pcs)|600|750~CHOCOLATE 4 Ltr (1 Pcs)|600|750~MANGO 4 Ltr (1 Pcs)|600|750~PLAIN PINEAPPLE 4 Ltr (1 Pcs)|600|750~PLAIN PISTA 4 Ltr (1 Pcs)|600|750~MELODY 4 Ltr (1 Pcs)|624|780~CHIKKU 4 Ltr (1 Pcs)|640|800~BLACK CURRANT 4 Ltr (1 Pcs)|656|820~COFFEE ICE CREAM 4 Ltr (1 Pcs)|656|820~HAWAIIAN FANTASY 4 Ltr (1 Pcs)|656|820~HONEY GULKAND 4 Ltr (1 Pcs)|656|820~KAJU KISMIS 4 Ltr (1 Pcs)|656|820~PAN BANARAS 4 Ltr (1 Pcs)|656|820~VANILLA OREA 4 Ltr (1 Pcs)|656|820~ROASTED ALMOND 4 Ltr (1 Pcs)|680|850~CLASSIC CHAPPAN BHOG 4 Ltr (1 Pcs)|720|900~FRUIT PUNCH 4 Ltr (1 Pcs)|720|900~MOCHA ALMOND 4 Ltr (1 Pcs)|720|900~SPANISH DELIGHT 4 Ltr (1 Pcs)|784|980~FIG O HONEY 4 Ltr (1 Pcs)|784|980~SITAPHAL 4 Ltr (1 Pcs)|800|1000~ANJEER 4 Ltr (1 Pcs)|800|1000~RED CHILLI GUAVA 4 ltr (1 Pcs)|864|1080~RED VELVET 4 ltr (1 Pcs)|864|1080~AMERICAN DRY FRUIT 4 Ltr (1 Pcs)|864|1080~BAVARIAN CHOCOLATE 4 Ltr (1 Pcs)|864|1080~NATURAL RICH DRY FRUIT 4 Ltr (1 Pcs)|880|1100~ARABIAN DELIGHT 4 Ltr (1 Pcs)|880|1100~NUTTY CARAMEL 4 Ltr (1 Pcs)|880|1100~BISCOFF CREAM 4 Ltr (1 Pcs)|880|1100~RAJBHOG 4 Ltr (1 Pcs)|960|1200~SHAHI TUKDA 4 Ltr (1 Pcs)|960|1200~KESAR SANGAM 4 Ltr (1 Pcs)|1000|1250~STRAWBERRY (FD) 4 Ltr (1 Pcs)|296|370~VANILLA (FD) 4 Ltr (1 Pcs)|296|370~MANGO (FD) 4 Ltr (1 Pcs)|424|530~CHOCOLATE (FD) 4 Ltr (1 Pcs)|424|530~BUTTER SCOTCH (FD) 4 Ltr (1 Pcs)|464|580~BLACK CURRANT (FD) 4 Ltr (1 Pcs)|464|580~PISTA (FD) 4 Ltr (1 Pcs)|480|600~SPANISH DELIGHT (FD) 4 ltr (1 Pcs)|544|680~FIG O HONEY (FD) 4 ltr (1 Pcs)|544|680~RED CHILLI GUAVA (FD) 4 ltr (1 Pcs)|576|720~BAVARIAN CHOCOLATE (FD) 4 ltr (1 Pcs)|576|720~AMERICAN DRY FRUIT (FD) 4 ltr (1 Pcs)|592|740~BAVERIAN CHOCOLATE - 125 ML (8 Pcs)|320|400~CHIKKU - 125 ML (8 Pcs)|320|400~CARNIVAL ALMOND - 125 ML (8 Pcs)|384|480~KESAR SANGAM - 125 ML (8 Pcs)|384|480~FUNNY FIG - 125 ML (8 Pcs)|384|480~CREAMY VANILLA - 125 ML (8 Pcs)|288|360~ALPHANSO MANGO - 125 ML (8 Pcs)|320|400~ROASTED ALMOND - 125 ML (8 Pcs)|384|480~NATURAL RICH DRY FRUIT - 125 ML (8 Pcs)|384|480~BROWNIE FUDGE CHOCOLATE - 125 ML (8 Pcs)|384|480~BAVERIAN CHOCOLATE - 500 ML (1 Pcs)|144|180~CHIKKU - 500 ML (1 Pcs)|144|180~CARNIVAL ALMOND - 500 ML (1 Pcs)|148|185~FUNNY FIG - 500 ML (1 Pcs)|148|185~KESAR SANGAM - 500 ML (1 Pcs)|168|210~CREAMY VANILLA - 500 ML (1 Pcs)|144|180~ALPHANSO MANGO - 500 ML (1 Pcs)|144|180~ROASTED ALMOND - 500 ML (1 Pcs)|148|185~NATURAL RICH DRY FRUIT - 500 ML (1 Pcs)|148|185~BROWNIE FUDGE CHOCOLATE - 500 ML (1 Pcs)|152|190~BAVERIAN CHOCOLATE - 1000 ML (1 Pcs)|300|375~CHIKKU - 1000 ML (1 Pcs)|300|375~FUNNY FIG - 1000 ML (1 Pcs)|300|375~CARNIVAL ALMOND - 1000 ML (1 Pcs)|320|400~KESAR SANGAM - 1000 ML (1 Pcs)|320|400";
+var rawData = "VANILLA 30ML (30 Pcs)|144|180~STRAWBERRY 30ml (30 Pcs)|144|180~BUTTER SCOTCH 30ml (30 Pcs)|144|180~CHOCOLATE 30ml (30 Pcs)|144|180~VANILLA 70ML (24 Pcs)|192|240~CHOCOLATE 70ml (24 Pcs)|192|240~STRAWBERRY 70ml (24 Pcs)|192|240~BUTTER SCOTCH 70ml (24 Pcs)|192|240~PISTA 70ml (24 Pcs)|192|240~MANGO 70ml (24 Pcs)|192|240~VANILLA 100ML (12 Pcs)|144|180~CHOCOLATE 100ml (12 Pcs)|144|180~STRAWBERRY 100ml (12 Pcs)|144|180~BUTTER SCOTCH 100ml (12 Pcs)|144|180~PISTA 100ml (12 Pcs)|144|180~MANGO 100ml (12 Pcs)|144|180~VANILLA 100ML (22 Pcs)|264|330~BUTTER SCOTCH 100ml (22 Pcs)|264|330~MANGO MAGIC 100ML (20 Pcs)|240|300~MANGO SIP UP 30ML (30 Pcs)|120|150~STRAWBERRY SIP UP 30ML (30 Pcs)|120|150~ORANGE ICE CANDY 35ml (30 Pcs)|144|180~MANGO ICE CANDY 35ml (30 Pcs)|144|180~GRAPE ICE CANDY 35ml (30 Pcs)|144|180~PINEAPPLE ICE CANDY 35ml (30 Pcs)|144|180~MANGO ICE CANDY 60ml (24 Pcs)|192|240~ORANGE ICE CANDY 60ml (24 Pcs)|192|240~STRAWBERRY ICECANDY - 60ml (24 Pcs)|192|240~GRAPE ICECANDY - 60ml (24 Pcs)|192|240~PINEAPPLE ICECANDY - 60ml (24 Pcs)|192|240~JALJEERA ICECANDY - 60ml (24 Pcs)|192|240~LYCHEE ICE CANDY 60ml (24 Pcs)|192|240~GREEN APPLE ICE CANDY 60ml (24 Pcs)|192|240~CHILLI PINK GUAVA ICE CANDY 60ml (24 Pcs)|192|240~BLUE BERRY ICE CANDY 60ml (24 Pcs)|192|240~STRAWBERRY DUET 60ml (24 Pcs)|384|480~MANGO DUET 60ml (24 Pcs)|384|480~ORANGE BAR 40ml (24 Pcs)|288|360~MINI CHOCOBAR 40ml (24 Pcs)|192|240~PREMIUM CHOCOBAR 70ml (16 Pcs)|256|320~CHOCOBASH 65ml (16 Pcs)|384|480~VANILLA CONE 40ml (30 Pcs)|240|300~BUTTER SCOTCH CONE 40ml (30 Pcs)|240|300~VANILLA CONE 60ml (16 Pcs)|256|320~STRAWBERRY CONE 60ml (16 Pcs)|256|320~PISTA CONE 60ml (16 Pcs)|256|320~CHOCOLATE CONE 60ml (16 Pcs)|320|400~BUTTER SCOTCH CONE 60ml (16 Pcs)|320|400~BLACK CURRANT CONE 60ml (16 Pcs)|320|400~VANILLA CONE 110ml (16 Pcs)|384|480~STRAWBERRY CONE 110ml (16 Pcs)|384|480~PISTA CONE 110ml (16 Pcs)|512|640~CHOCOLATE CONE 110ml (16 Pcs)|512|640~BUTTER SCOTCH CONE 110ml (16 Pcs)|512|640~BLACK CURRANT CONE 110ml (16 Pcs)|512|640~GULKAND KULFI 60ml (10 Pcs)|240|300~MALAI MASTI 60ml (10 Pcs)|240|300~PISTA KESAR 60ml (10 Pcs)|240|300~CHOCO ALMOND 60ml (10 Pcs)|240|300~MAWA CRUNCH 60ml (10 Pcs)|240|300~MAWA KULFI 60ml (10 Pcs)|240|300~PREMIUM MATKA KULFI 100ml (12 Pcs)|480|600~CASSATA 120ml (10 Pcs)|400|500~SWINGER SUNDAE 100ML (8 Pcs)|160|200~MANGO SUNDAE 100 ML (12 Pcs)|288|360~STRAWBERRY SUNDAE - 100ML (12 Pcs)|288|360~CHOCOLATE SUNDAE- 100ML (12 Pcs)|288|360~AMERICAN SUNDAE 100ML (12 Pcs)|288|360~GUDBUD 180ML (6 Pcs)|240|300~STRAWBERRY 700ml (1+1)|168|210~VANILLA 700ml (1+1)|168|210~CHOCOLATE 700ml (1+1)|208|260~PLAIN PISTA 700ml (1+1)|208|260~PLAIN PINEAPPLE 700ml (1+1)|208|260~BUTTER SCOTCH 700ml (1+1)|208|260~STRAWBERRY 1.25 Ltr (1 Pcs)|160|200~VANILLA 1.25 Ltr (1 Pcs)|160|200~CHOCOLATE 1.25 Ltr (1 Pcs)|192|240~PLAIN PISTA 1.25 Ltr (1 Pcs)|192|240~PLAIN PINEAPPLE 1.25 Ltr (1 Pcs)|192|240~VANILLA 4 Ltr (1 Pcs)|440|550~STRAWBERRY 4 Ltr (1 Pcs)|440|550~MADAGASCAR VANILLA 4 Ltr (1 Pcs)|560|700~DIL KHUSH 4 Ltr (1 Pcs)|576|720~BUTTER SCOTCH 4 Ltr (1 Pcs)|600|750~CHOCOLATE 4 Ltr (1 Pcs)|600|750~MANGO 4 Ltr (1 Pcs)|600|750~PLAIN PINEAPPLE 4 Ltr (1 Pcs)|600|750~PLAIN PISTA 4 Ltr (1 Pcs)|600|750~MELODY 4 Ltr (1 Pcs)|624|780~CHIKKU 4 Ltr (1 Pcs)|640|800~BLACK CURRANT 4 Ltr (1 Pcs)|656|820~COFFEE ICE CREAM 4 Ltr (1 Pcs)|656|820~HAWAIIAN FANTASY 4 Ltr (1 Pcs)|656|820~HONEY GULKAND 4 Ltr (1 Pcs)|656|820~KAJU KISMIS 4 Ltr (1 Pcs)|656|820~PAN BANARAS 4 Ltr (1 Pcs)|656|820~VANILLA OREA 4 Ltr (1 Pcs)|656|820~ROASTED ALMOND 4 Ltr (1 Pcs)|680|850~CLASSIC CHAPPAN BHOG 4 Ltr (1 Pcs)|720|900~FRUIT PUNCH 4 Ltr (1 Pcs)|720|900~MOCHA ALMOND 4 Ltr (1 Pcs)|720|900~SPANISH DELIGHT 4 Ltr (1 Pcs)|784|980~FIG O HONEY 4 Ltr (1 Pcs)|784|980~SITAPHAL 4 Ltr (1 Pcs)|800|1000~ANJEER 4 Ltr (1 Pcs)|800|1000~RED CHILLI GUAVA 4 ltr (1 Pcs)|864|1080~RED VELVET 4 ltr (1 Pcs)|864|1080~AMERICAN DRY FRUIT 4 Ltr (1 Pcs)|864|1080~BAVARIAN CHOCOLATE 4 Ltr (1 Pcs)|864|1080~NATURAL RICH DRY FRUIT 4 Ltr (1 Pcs)|880|1100~ARABIAN DELIGHT 4 Ltr (1 Pcs)|880|1100~NUTTY CARAMEL 4 Ltr (1 Pcs)|880|1100~BISCOFF CREAM 4 Ltr (1 Pcs)|880|1100~RAJBHOG 4 Ltr (1 Pcs)|960|1200~SHAHI TUKDA 4 Ltr (1 Pcs)|960|1200~KESAR SANGAM 4 Ltr (1 Pcs)|1000|1250~STRAWBERRY (FD) 4 Ltr (1 Pcs)|296|370~VANILLA (FD) 4 Ltr (1 Pcs)|296|370~MANGO (FD) 4 Ltr (1 Pcs)|424|530~CHOCOLATE (FD) 4 Ltr (1 Pcs)|424|530~BUTTER SCOTCH (FD) 4 Ltr (1 Pcs)|464|580~BLACK CURRANT (FD) 4 Ltr (1 Pcs)|464|580~PISTA (FD) 4 Ltr (1 Pcs)|480|600~SPANISH DELIGHT (FD) 4 ltr (1 Pcs)|544|680~FIG O HONEY (FD) 4 ltr (1 Pcs)|544|680~RED CHILLI GUAVA (FD) 4 ltr (1 Pcs)|576|720~BAVARIAN CHOCOLATE (FD) 4 ltr (1 Pcs)|576|720~AMERICAN DRY FRUIT (FD) 4 ltr (1 Pcs)|592|740~BAVERIAN CHOCOLATE - 125 ML (8 Pcs)|320|400~CHIKKU - 125 ML (8 Pcs)|320|400~CARNIVAL ALMOND - 125 ML (8 Pcs)|384|480~KESAR SANGAM - 125 ML (8 Pcs)|384|480~FUNNY FIG - 125 ML (8 Pcs)|384|480~CREAMY VANILLA - 125 ML (8 Pcs)|288|360~ALPHANSO MANGO - 125 ML (8 Pcs)|320|400~ROASTED ALMOND - 125 ML (8 Pcs)|384|480~NATURAL RICH DRY FRUIT - 125 ML (8 Pcs)|384|480~BROWNIE FUDGE CHOCOLATE - 125 ML (8 Pcs)|384|480~BAVERIAN CHOCOLATE - 500 ML (1 Pcs)|144|180~CHIKKU - 500 ML (1 Pcs)|144|180~CARNIVAL ALMOND - 500 ML (1 Pcs)|148|185~FUNNY FIG - 500 ML (1 Pcs)|148|185~KESAR SANGAM - 500 ML (1 Pcs)|168|210~CREAMY VANILLA - 500 ML (1 Pcs)|144|180~ALPHANSO MANGO - 500 ML (1 Pcs)|144|180~ROASTED ALMOND - 500 ML (1 Pcs)|148|185~NATURAL RICH DRY FRUIT - 500 ML (1 Pcs)|148|185~BROWNIE FUDGE CHOCOLATE - 500 ML (1 Pcs)|152|190~BAVERIAN CHOCOLATE - 1000 ML (1 Pcs)|300|375~CHIKKU - 1000 ML (1 Pcs)|300|375~FUNNY FIG - 1000 ML (1 Pcs)|300|375~CARNIVAL ALMOND - 1000 ML (1 Pcs)|320|400~KESAR SANGAM - 1000 ML (1 Pcs)|320|400";
 
-const masterItems = rawData.split('~').map(x => { const p = x.split('|'); return { name: p[0], outlet_box: parseFloat(p[1]), mrp_box: parseFloat(p[2]) }; });
-let outlets = [{"name": "Nagaraju medical", "phone": "9799797979", "area": "Adoni", "balance": 192}], stockData = {}, cart = [], currentPayIndex = null;
+var masterItems = [];
+var splitArr = rawData.split('~');
+for(var i=0; i<splitArr.length; i++){
+  var p = splitArr[i].split('|');
+  masterItems.push({ name: p[0], outlet_box: parseFloat(p[1]), mrp_box: parseFloat(p[2]) });
+}
+
+var outlets = [{"name": "Nagaraju medical", "phone": "9799797979", "area": "Adoni", "balance": 192}];
+var stockData = {};
+var cart = [];
+var currentPayIndex = null;
 
 function setStore(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch(e) {} }
-function getStore(k, def) { try { let v = localStorage.getItem(k); return v ? JSON.parse(v) : def; } catch(e) { return def; } }
+function getStore(k, def) { try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : def; } catch(e) { return def; } }
 
-function init() {
+function startApp() {
   outlets = getStore('shaik_outlets', outlets);
   stockData = getStore('shaik_stock', {});
-  document.getElementById('inp-date').value = new Date().toISOString().split('T')[0];
-  populateOutlets(); populateItems(); renderCart(); renderStockTable(); renderKhata();
+  populateOutlets();
+  populateItems();
+  renderKhata();
+  renderStockTable();
 }
+
 function openModal(id, show) { document.getElementById(id).style.display = show ? 'flex' : 'none'; }
+
 function populateOutlets() {
-  const sel = document.getElementById('sel-outlet'); sel.innerHTML = '';
-  outlets.forEach((o, i) => { sel.innerHTML += `<option value="${i}">${o.name} (${o.phone}) - Udhar: ₹${o.balance||0}</option>`; });
-  outletChanged();
+  var sel = document.getElementById('sel-outlet');
+  sel.innerHTML = '';
+  for(var i=0; i<outlets.length; i++) {
+    sel.innerHTML += '<option value="' + i + '">' + outlets[i].name + ' (' + outlets[i].phone + ') - Udhar: ₹' + (outlets[i].balance||0) + '</option>';
+  }
 }
+
 function populateItems() {
-  const sel = document.getElementById('sel-item'), stkSel = document.getElementById('m-stk-item');
-  sel.innerHTML = ''; stkSel.innerHTML = '';
-  masterItems.forEach((it, i) => {
-    sel.innerHTML += `<option value="${i}">${it.name} | Rate: ₹${it.outlet_box} | MRP: ₹${it.mrp_box}</option>`;
-    stkSel.innerHTML += `<option value="${i}">${it.name}</option>`;
-  });
+  var sel = document.getElementById('sel-item');
+  var stkSel = document.getElementById('m-stk-item');
+  sel.innerHTML = '';
+  stkSel.innerHTML = '';
+  for(var i=0; i<masterItems.length; i++) {
+    var it = masterItems[i];
+    sel.innerHTML += '<option value="' + i + '">' + it.name + ' | ₹' + it.outlet_box + ' (MRP ₹' + it.mrp_box + ')</option>';
+    stkSel.innerHTML += '<option value="' + i + '">' + it.name + '</option>';
+  }
   itemDropdownChanged();
 }
+
 function itemDropdownChanged() {
-  const idx = document.getElementById('sel-item').value; if(idx === '') return;
-  const it = masterItems[idx];
+  var idx = document.getElementById('sel-item').value;
+  if(idx === '') return;
+  var it = masterItems[idx];
   document.getElementById('inp-outlet-rate-box').value = it.outlet_box;
   document.getElementById('inp-mrp-box').value = it.mrp_box;
-  document.getElementById('lbl-avail-stock').innerText = `Stock: ${stockData[it.name] || 50} Bx`;
+  document.getElementById('lbl-avail-stock').innerText = 'Stock: ' + (stockData[it.name] || 50) + ' Bx';
 }
+
 function filterItems() {
-  const q = document.getElementById('inp-item-search').value.toLowerCase(), sel = document.getElementById('sel-item');
+  var q = document.getElementById('inp-item-search').value.toLowerCase();
+  var sel = document.getElementById('sel-item');
   sel.innerHTML = '';
-  masterItems.forEach((it, i) => { if(it.name.toLowerCase().includes(q)) sel.innerHTML += `<option value="${i}">${it.name} | Rate: ₹${it.outlet_box}</option>`; });
+  for(var i=0; i<masterItems.length; i++) {
+    var it = masterItems[i];
+    if(it.name.toLowerCase().indexOf(q) > -1) {
+      sel.innerHTML += '<option value="' + i + '">' + it.name + ' | ₹' + it.outlet_box + '</option>';
+    }
+  }
   itemDropdownChanged();
 }
+
 function outletChanged() { updateBill(); }
+
 function addItem() {
-  const idx = document.getElementById('sel-item').value, qty = parseInt(document.getElementById('inp-qty').value) || 1;
+  var idx = document.getElementById('sel-item').value;
+  var qty = parseInt(document.getElementById('inp-qty').value) || 1;
   if(idx === '' || qty <= 0) return;
-  const it = masterItems[idx];
-  cart.push({ name: it.name, rate: it.outlet_box, mrp: it.mrp_box, qty, total: it.outlet_box * qty });
+  var it = masterItems[idx];
+  cart.push({ name: it.name, rate: it.outlet_box, mrp: it.mrp_box, qty: qty, total: it.outlet_box * qty });
   renderCart();
 }
+
 function renderCart() {
-  const c = document.getElementById('cart-container'); document.getElementById('cart-count').innerText = cart.length;
-  if(!cart.length) { c.innerHTML = `<p style="text-align:center;color:#94a3b8;font-size:13px;padding:12px">Koi item add nahi kiya gaya hai.</p>`; updateBill(); return; }
-  c.innerHTML = cart.map((x, i) => `<div class="item-row"><div style="display:flex;justify-content:space-between;font-weight:bold;font-size:13px"><span>${x.name}</span><span style="color:#10b981">₹${x.total.toFixed(2)}</span></div><div style="display:flex;justify-content:space-between;font-size:11px;color:#94a3b8;margin-top:4px"><span>${x.qty} Bx × ₹${x.rate} | MRP: ₹${x.mrp}</span><button type="button" onclick="cart.splice(${i},1);renderCart()" style="background:none;border:none;color:#ef4444;font-weight:bold">Hatao</button></div></div>`).join('');
+  var c = document.getElementById('cart-container');
+  document.getElementById('cart-count').innerText = cart.length;
+  if(!cart.length) {
+    c.innerHTML = '<p style="text-align:center;color:#94a3b8;font-size:13px;padding:12px">Koi item add nahi kiya gaya hai.</p>';
+    updateBill();
+    return;
+  }
+  var html = '';
+  for(var i=0; i<cart.length; i++) {
+    var x = cart[i];
+    html += '<div class="item-row"><div style="display:flex;justify-content:space-between;font-weight:bold;font-size:13px"><span>' + x.name + '</span><span style="color:#10b981">₹' + x.total.toFixed(2) + '</span></div><div style="display:flex;justify-content:space-between;font-size:11px;color:#94a3b8;margin-top:4px"><span>' + x.qty + ' Bx × ₹' + x.rate + ' | MRP: ₹' + x.mrp + '</span><button type="button" onclick="cart.splice(' + i + ',1);renderCart()" style="background:none;border:none;color:#ef4444;font-weight:bold">Hatao</button></div></div>';
+  }
+  c.innerHTML = html;
   updateBill();
 }
+
 function clearCart() { cart = []; renderCart(); }
+
 function updateBill() {
-  let sub = cart.reduce((a, b) => a + b.total, 0);
-  document.getElementById('txt-final').innerText = sub.toFixed(2); calcUdhar();
+  var sub = 0;
+  for(var i=0; i<cart.length; i++) sub += cart[i].total;
+  document.getElementById('txt-final').innerText = sub.toFixed(2);
+  calcUdhar();
 }
+
 function calcUdhar() {
-  let sub = cart.reduce((a, b) => a + b.total, 0), cash = parseFloat(document.getElementById('inp-cash-received').value) || 0;
+  var sub = 0;
+  for(var i=0; i<cart.length; i++) sub += cart[i].total;
+  var cash = parseFloat(document.getElementById('inp-cash-received').value) || 0;
   document.getElementById('inp-pending-udhar').value = Math.max(0, sub - cash).toFixed(2);
 }
+
 function showTab(n) {
-  [1,2,3].forEach(i => { document.getElementById(`tab-${i}`).classList.toggle('hidden', i!==n); document.getElementById(`tab-btn-${i}`).classList.toggle('active', i===n); });
-  if(n===2) renderKhata(); if(n===3) renderStockTable();
+  var tabs = [1,2,3];
+  for(var i=0; i<tabs.length; i++) {
+    var num = tabs[i];
+    var t = document.getElementById('tab-' + num);
+    var b = document.getElementById('tab-btn-' + num);
+    if(num === n) { t.classList.remove('hidden'); b.classList.add('active'); }
+    else { t.classList.add('hidden'); b.classList.remove('active'); }
+  }
+  if(n === 2) renderKhata();
+  if(n === 3) renderStockTable();
 }
+
 function saveOutletFromModal() {
-  const name = document.getElementById('m-name').value, phone = document.getElementById('m-phone').value;
-  if(!name || !phone) return alert('Details daalein!');
-  outlets.push({ name, phone, area: 'Adoni', balance: 0 }); setStore('shaik_outlets', outlets);
-  openModal('outletModal',false); populateOutlets(); renderKhata();
+  var name = document.getElementById('m-name').value;
+  var phone = document.getElementById('m-phone').value;
+  if(!name || !phone) return alert('Name aur Phone zaroori hai!');
+  outlets.push({ name: name, phone: phone, area: 'Adoni', balance: 0 });
+  setStore('shaik_outlets', outlets);
+  openModal('outletModal', false);
+  populateOutlets();
+  renderKhata();
 }
+
 function openEditOutletModal() {
-  const idx = document.getElementById('sel-outlet').value; if(idx==='') return;
-  document.getElementById('edit-m-name').value = outlets[idx].name; document.getElementById('edit-m-phone').value = outlets[idx].phone;
-  openModal('editOutletModal',true);
+  var idx = document.getElementById('sel-outlet').value;
+  if(idx === '') return;
+  document.getElementById('edit-m-name').value = outlets[idx].name;
+  document.getElementById('edit-m-phone').value = outlets[idx].phone;
+  openModal('editOutletModal', true);
 }
+
 function updateOutletFromModal() {
-  const idx = document.getElementById('sel-outlet').value;
-  
+  var idx = document.getElementById('sel-outlet').value;
+  outlets[idx].name = document.getElementById('edit-m-name').value;
+  outlets[idx].phone = document.getElementById('edit-m-phone').value;
+  setStore('shaik_outlets', outlets);
+  openModal('editOutletModal', false);
+  populateOutlets();
+  renderKhata();
+}
+
+function deleteSelectedOutlet() {
+  var idx = document.getElementById('sel-outlet').value;
+  if(idx !== '' && confirm('Delete this outlet?')) {
+    outlets.splice(idx, 1);
+    setStore('shaik_outlets', outlets);
+    populateOutlets();
+    renderKhata();
+  }
+}
+
+function submitNewStockInward() {
+  var idx = document.getElementById('m-stk-item').value;
+  var qty = parseInt(document.getElementById('m-stk-qty').value) || 0;
+  var nm = masterItems[idx].name;
+  stockData[nm] = (stockData[nm] || 50) + qty;
+  setStore('shaik_stock', stockData);
+  openModal('newStockModal', false);
+  renderStockTable();
+  itemDropdownChanged();
+}
+
+function renderStockTable() {
+  var html = '';
+  for(var i=0; i<masterItems.length; i++) {
+    var it = masterItems[i];
+    html += '<div class="item-row" style="display:flex;justify-content:space-between;align-items:center"><div><div style="font-weight:bold;font-size:12px">' + it.name + '</div><div style="font-size:10px;color:#94a3b8">Rate: ₹' + it.outlet_box + ' | MRP: ₹' + it.mrp_box + '</div></div><div style="font-weight:bold;color:#60a5fa;font-size:13px">' + (stockData[it.name]||50) + ' Bx</div></div>';
+  }
+  document.getElementById('stock-items-table-container').innerHTML = html;
+}
+
+function renderKhata() {
+  var tot = 0;
+  var html = '';
+  for(var i=0; i<outlets.length; i++) {
+    var o = outlets[i];
+    tot += (o.balance || 0);
+    html += '<div class="item-row"><div style="display:flex;justify-content:space-between"><span style="font-weight:bold">' + o.name + '</span><span style="color:#ef4444;font-weight:bold">₹' + (o.balance||0) + '</span></div><div style="font-size:11px;color:#94a3b8;margin-top:4px;display:flex;justify-content:space-between;align-items:center"><span>📞 ' + o.phone + '</span><button class="btn-sm btn-success" onclick="openPay(' + i + ')">💵 Jama</button></div></div>';
+  }
+  document.getElementById('khata-container').innerHTML = html;
+  document.getElementById('txt-total-udhar').innerText = tot.toFixed(2);
+}
+
+function openPay(i) {
+  currentPayIndex = i;
+  document.getElementById('lbl-pay-outlet-name').innerText = outlets[i].name + ' (Udhar: ₹' + (outlets[i].balance||0) + ')';
+  document.getElementById('inp-pay-amount').value = '';
+  openModal('paymentModal', true);
+}
+
+function submitPayment() {
+  var amt
+   = parseFloat(document.getElementById('inp-pay-amount').value) || 0;
+  if(amt <= 0) return;
+  outlets[currentPayIndex].balance = Math.max(0, (outlets[currentPayIndex].balance||0) - amt);
+  setStore('shaik_outlets', outlets);
+  openModal('paymentModal', false);
+  populateOutlets();
+  renderKhata();
+}
+
+function saveBillKhata() {
+  var idx = document.getElementById('sel-outlet').value;
+  if(idx === '' || !cart.length) return alert('Pehle Items add karein!');
+  var sub = 0;
+  for(var i=0; i<cart.length; i++) sub += cart[i].total;
+  var cash = parseFloat(document.getElementById('inp-cash-received').value) || 0;
+  outlets[idx].balance = (outlets[idx].balance||0) + (sub - cash);
+  setStore('shaik_outlets', outlets);
+  cart = [];
+  renderCart();
+  document.getElementById('inp-cash-received').value = '';
+  populateOutlets();
+  renderKhata();
+  alert('Bill Saved Successfully!');
+}
+
+function downloadBillImage() {
+  var idx = document.getElementById('sel-outlet').value;
+  if(idx === '' || !cart.length) return alert('Pehle bill add karein!');
+  var o = outlets[idx];
+  var dt = document.getElementById('inp-date').value || '';
+  var cv = document.createElement('canvas');
+  cv.width = 700;
+  cv.height = 440 + cart.length * 34;
+  var ctx = cv.getContext('2d');
+  ctx.fillStyle='#fff'; ctx.fillRect(0,0,700,cv.height);
+  ctx.fillStyle='#1e3a8a'; ctx.fillRect(0,0,700,12);
+  ctx.fillStyle='#2563eb'; ctx.font='bold 22px sans-serif'; ctx.fillText('SHAIK ENTERPRISES - ADONI', 25, 45);
+  ctx.fillStyle='#334155'; ctx.font='12px sans-serif'; ctx.fillText('BN Talkies Back Side, Near GB Complex | Cell: 6301284479', 25, 65);
+  ctx.fillText('Outlet: ' + o.name + ' (' + o.phone + ') | Date: ' + dt, 25, 90);
+  ctx.fillStyle='#2563eb'; ctx.fillRect(20, 105, 660, 28);
+  ctx.fillStyle='#fff'; ctx.font='bold 12px sans-serif';
+  ctx.fillText('ITEM', 30, 123); ctx.fillText('QTY', 360, 123); ctx.fillText('RATE', 430, 123); ctx.fillText('MRP', 510, 123); ctx.fillText('TOTAL', 590, 123);
+  var y = 152, gt = 0;
+  for(var i=0; i<cart.length; i++) {
+    var c = cart[i];
+    gt += c.total;
+    ctx.fillStyle='#0f172a'; ctx.font='12px sans-serif';
+    ctx.fillText(c.name, 30, y); ctx.fillText(c.qty+' Bx', 360, y); ctx.fillText('₹'+c.rate, 430, y); ctx.fillText('₹'+c.mrp, 510, y); ctx.fillText('₹'+c.total, 590, y);
+    y += 30;
+  }
+  ctx.fillStyle='#166534'; ctx.font='bold 16px sans-serif'; ctx.fillText('GRAND TOTAL: ₹' + gt.toFixed(2), 430, y + 25);
+  var a = document.createElement('a');
+  a.download = 'Bill_' + o.name + '.jpg';
+  a.href = cv.toDataURL('image/jpeg', 0.95);
+  a.click();
+}
+
+function sendWhatsApp() {
+  var idx = document.getElementById('sel-outlet').value;
+  if(idx === '' || !cart.length) return alert('Pehle bill add karein!');
+  var o = outlets[idx];
+  var sub = 0;
+  var t = '*🍦 SHAIK ENTERPRISES - ADONI*\n📞 6301284479\n*Outlet:* ' + o.name + '\n----------------\n';
+  for(var i=0; i<cart.length; i++) {
+    var c = cart[i];
+    sub += c.total;
+    t += '• *' + c.name + '*\n  ' + c.qty + ' Bx x ₹' + c.rate + ' = *₹' + c.total + '*\n';
+  }
+  t += '----------------\n*Grand Total: ₹' + sub + '*';
+  window.open('https://wa.me/91' + o.phone + '?text=' + encodeURIComponent(t));
+}
+
+startApp();
+</script>
+</body>
+</html>
